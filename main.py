@@ -21,7 +21,7 @@ feat_cols = train_df.columns.tolist()[1:]
 
                        
 x_train =  train_df[feat_cols].values.reshape(-1,28,28,1)/255
-y_train =  train_df.iloc[:,0]
+y_train =  train_df.iloc[:,0].values
 
 x_test =   test_df[feat_cols].values.reshape(-1,28,28,1)/255
 y_test =   test_df.iloc[:,0].values
@@ -35,17 +35,17 @@ y_test =  keras.utils.to_categorical(y_test)
 
 #x_train,x_validate,y_test,y_validate = train_test_split(x_train,y_train,test_size=0.2,random_state=12345)
 model = Sequential()
-model.add(Dense(64, activation='relu', input_dim=784))
+model.add(Dense(784, activation='relu', input_dim=784))
 model.add(Dense(10, activation='softmax'))
 #compilation process....
 
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='categorical_crossentropy',
-              optimizer=sgd,
+              optimizer='adam',
               metrics=['accuracy'])
 
 model.fit(x_train, y_train,
           epochs=20,
-          batch_size=128)
+          batch_size=128,verbose=1)
 score = model.evaluate(x_test, y_test, batch_size=128)
                        
